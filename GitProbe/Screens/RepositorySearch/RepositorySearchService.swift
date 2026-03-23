@@ -1,10 +1,10 @@
 import Foundation
 
-protocol RepositorySearchService {
+protocol RepositorySearchAPIService {
   func searchRepositories(keyword: String, page: Int) async throws -> RepositorySearchResponse
 }
 
-struct RepositorySearchServiceImpl: RepositorySearchService {
+struct RepositorySearchAPIServiceImpl: RepositorySearchAPIService {
   private let httpClient: HTTPClient
   
   init(httpClient: HTTPClient) {

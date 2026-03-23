@@ -20,14 +20,14 @@ final class RepositorySearchViewModel: ObservableObject {
     !showRecentSearches && !autocompleteItems.isEmpty
   }
   
-  private let repositorySearchService: RepositorySearchService
+  private let repositorySearchAPIService: RepositorySearchAPIService
   private let localDataService: RepositorySearchLocalDataService
   private var currentPage: Int = 1
   private var hasMore: Bool = true
   private var cancellables = Set<AnyCancellable>()
   
-  init(repositorySearchService: RepositorySearchService, localDataService: RepositorySearchLocalDataService) {
-    self.repositorySearchService = repositorySearchService
+  init(repositorySearchAPIService: RepositorySearchAPIService, localDataService: RepositorySearchLocalDataService) {
+    self.repositorySearchAPIService = repositorySearchAPIService
     self.localDataService = localDataService
     
     bindQuery()
@@ -149,7 +149,7 @@ final class RepositorySearchViewModel: ObservableObject {
     }
     
     do {
-      let response = try await repositorySearchService.searchRepositories(keyword: query, page: page)
+      let response = try await repositorySearchAPIService.searchRepositories(keyword: query, page: page)
       totalCount = response.totalCount
       currentPage = page
       
