@@ -8,7 +8,7 @@ struct RepositoryWebScreen: View {
   }
   
   var body: some View {
-    RepositoryWebView(url: viewModel.repositoryURL)
+    RepositoryWebView(viewModel: viewModel)
       .ignoresSafeArea(edges: .bottom)
   }
 }

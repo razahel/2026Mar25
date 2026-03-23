@@ -2,15 +2,15 @@ import SwiftUI
 import WebKit
 
 struct RepositoryWebView: UIViewRepresentable {
-  let url: URL
+  @ObservedObject var viewModel: RepositoryWebViewModel
   
   func makeUIView(context: Context) -> WKWebView {
     WKWebView(frame: .zero)
   }
   
   func updateUIView(_ webView: WKWebView, context: Context) {
-    let request = URLRequest(url: url)
-    if webView.url != url {
+    let request = URLRequest(url: viewModel.repositoryURL)
+    if webView.url != viewModel.repositoryURL {
       webView.load(request)
     }
   }
