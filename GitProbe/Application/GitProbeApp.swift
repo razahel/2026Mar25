@@ -27,7 +27,7 @@ struct GitProbeApp: App {
   
   var body: some Scene {
     WindowGroup {
-      SearchScreen(repositorySearchService: appContainer.searchService)
+      RepositorySearchScreen(repositorySearchService: appContainer.searchService)
     }
     .modelContainer(sharedModelContainer)
   }

@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct SearchScreen: View {
+struct RepositorySearchScreen: View {
   @Environment(\.modelContext) private var modelContext
   private let repositorySearchService: RepositorySearchService
   
