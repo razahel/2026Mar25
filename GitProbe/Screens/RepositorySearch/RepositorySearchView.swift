@@ -1,13 +1,7 @@
 import SwiftUI
 
 struct RepositorySearchView: View {
-  @StateObject private var viewModel: RepositorySearchViewModel
-  
-  init(viewModel: RepositorySearchViewModel) {
-    _viewModel = StateObject(
-      wrappedValue: viewModel
-    )
-  }
+  @ObservedObject var viewModel: RepositorySearchViewModel
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -149,7 +143,7 @@ struct RepositorySearchView: View {
       List {
         ForEach(viewModel.repositories) { item in
           NavigationLink {
-            RepositoryWebScreen(repositoryURL: item.htmlURL)
+            viewModel.onTapRepositoryItem(item)
           } label: {
             RepositoryRowView(item: item)
           }

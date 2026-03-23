@@ -9,8 +9,8 @@ struct RepositoryWebView: UIViewRepresentable {
   }
   
   func updateUIView(_ webView: WKWebView, context: Context) {
-    let request = URLRequest(url: viewModel.repositoryURL)
-    if webView.url != viewModel.repositoryURL {
+    let request = URLRequest(url: viewModel.url)
+    if webView.url != viewModel.url {
       webView.load(request)
     }
   }

@@ -3,9 +3,9 @@ import Combine
 
 @MainActor
 final class RepositoryWebViewModel: ObservableObject {
-  let repositoryURL: URL
+  let url: URL
   
-  init(repositoryURL: URL) {
-    self.repositoryURL = repositoryURL
+  init(component: RepositoryWebComponent, url: URL) {
+    self.url = url
   }
 }

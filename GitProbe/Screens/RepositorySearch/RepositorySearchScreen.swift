@@ -2,21 +2,14 @@ import SwiftUI
 import SwiftData
 
 struct RepositorySearchScreen: View {
-  @Environment(\.modelContext) private var modelContext
-  private let component: RepositorySearchComponent
+  private let viewModel: RepositorySearchViewModel
   
-  init(component: RepositorySearchComponent) {
-    self.component = component
+  init(dependency: RepositorySearchDependency) {
+    let component = RepositorySearchComponent(dependency: dependency)    
+    self.viewModel = RepositorySearchViewModel(component: component)
   }
   
   var body: some View {
-    let apiService = component.makeAPIService()
-    let localDataClient = SwiftDataLocalDataClient(modelContext: modelContext)
-    let localDataService = RepositorySearchLocalDataServiceImpl(localDataClient: localDataClient)
-    let viewModel = RepositorySearchViewModel(
-      repositorySearchAPIService: apiService,
-      localDataService: localDataService
-    )
-    return RepositorySearchView(viewModel: viewModel)
+    RepositorySearchView(viewModel: viewModel)
   }
 }

@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import SwiftUI
 
 @MainActor
 final class RepositorySearchViewModel: ObservableObject {
@@ -20,15 +21,17 @@ final class RepositorySearchViewModel: ObservableObject {
     showRecentSearches == false && autocompleteItems.isEmpty == false
   }
   
-  private let repositorySearchAPIService: RepositorySearchAPIService
+  private let component: RepositorySearchComponent
+  private let apiService: RepositorySearchAPIService
   private let localDataService: RepositorySearchLocalDataService
   private var currentPage: Int = 1
   private var hasMore: Bool = true
   private var cancellables = Set<AnyCancellable>()
   
-  init(repositorySearchAPIService: RepositorySearchAPIService, localDataService: RepositorySearchLocalDataService) {
-    self.repositorySearchAPIService = repositorySearchAPIService
-    self.localDataService = localDataService
+  init(component: RepositorySearchComponent) {
+    self.component = component
+    self.apiService = component.apiService
+    self.localDataService = component.localDataService
     
     bindQuery()
   }
@@ -49,6 +52,10 @@ final class RepositorySearchViewModel: ObservableObject {
   func onTapAutocomplete(_ item: RecentSearchItem) {
     query = item.keyword
     Task { await search(with: item.keyword) }
+  }
+  
+  func onTapRepositoryItem(_ item: RepositorySearchItem) -> some View {
+    RepositoryWebScreen(dependency: component, url: item.htmlURL)
   }
   
   func onAppearRepositoryItem(_ item: RepositorySearchItem) {
@@ -149,7 +156,7 @@ final class RepositorySearchViewModel: ObservableObject {
     }
     
     do {
-      let response = try await repositorySearchAPIService.searchRepositories(keyword: query, page: page)
+      let response = try await apiService.searchRepositories(keyword: query, page: page)
       totalCount = response.totalCount
       currentPage = page
       

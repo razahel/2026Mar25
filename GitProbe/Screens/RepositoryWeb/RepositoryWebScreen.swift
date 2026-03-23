@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct RepositoryWebScreen: View {
-  @StateObject private var viewModel: RepositoryWebViewModel
+  private let viewModel: RepositoryWebViewModel
   
-  init(repositoryURL: URL) {
-    _viewModel = StateObject(wrappedValue: RepositoryWebViewModel(repositoryURL: repositoryURL))
+  init(dependency: RepositoryWebDependency, url: URL) {
+    let component = RepositoryWebComponent(dependency: dependency)
+    self.viewModel = RepositoryWebViewModel(component: component, url: url)
   }
   
   var body: some View {

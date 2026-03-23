@@ -2,16 +2,15 @@ import Foundation
 
 protocol RepositorySearchDependency {
   var httpClient: HTTPClient { get }
+  var localDataClient: SwiftDataLocalDataClient { get }
 }
 
-struct RepositorySearchComponent {
-  let httpClient: HTTPClient
-  
+struct RepositorySearchComponent: RepositoryWebDependency {
+  let apiService: RepositorySearchAPIService
+  let localDataService: RepositorySearchLocalDataService
+
   init(dependency: RepositorySearchDependency) {
-    self.httpClient = dependency.httpClient
-  }
-  
-  func makeAPIService() -> RepositorySearchAPIService {
-    RepositorySearchAPIServiceImpl(httpClient: httpClient)
+    self.apiService = RepositorySearchAPIServiceImpl(httpClient: dependency.httpClient)
+    self.localDataService = RepositorySearchLocalDataServiceImpl(localDataClient: dependency.localDataClient)
   }
 }
