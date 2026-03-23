@@ -10,9 +10,11 @@ import SwiftData
 
 @main
 struct GitProbeApp: App {
+  private let appContainer = AppContainer()
+  
   var sharedModelContainer: ModelContainer = {
     let schema = Schema([
-      Item.self,
+      RecentSearch.self,
     ])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
     
@@ -25,7 +27,7 @@ struct GitProbeApp: App {
   
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      SearchScreen(githubService: appContainer.githubService)
     }
     .modelContainer(sharedModelContainer)
   }
