@@ -5,7 +5,7 @@ struct RepositorySearchView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("search.title")
+      Text(L10N.searchTitle.text)
         .font(.largeTitle)
         .bold()
         .padding(.top, 8)
@@ -13,7 +13,7 @@ struct RepositorySearchView: View {
       HStack(spacing: 8) {
         Image(systemName: "magnifyingglass")
           .foregroundStyle(.secondary)
-        TextField("search.placeholder", text: $viewModel.query)
+        TextField(L10N.searchPlaceholder.text, text: $viewModel.query)
           .submitLabel(.search)
           .onSubmit {
             viewModel.didTapSearch()
@@ -63,11 +63,11 @@ struct RepositorySearchView: View {
   private var recentSearchView: some View {
     VStack(alignment: .leading, spacing: 10) {
       HStack {
-        Text("recent.title")
+        Text(L10N.recentTitle.text)
           .font(.headline)
         Spacer()
         if !viewModel.recentSearches.isEmpty {
-          Button("recent.delete_all") {
+          Button(L10N.recentDeleteAll.text) {
             viewModel.deleteAllRecentSearches()
           }
           .font(.caption)
