@@ -35,11 +35,11 @@ private struct RepositorySearchScreenContainer: View {
         .onAppear {
           viewModel.onAppear()
         }
-        .alert("오류", isPresented: Binding(
+        .alert("common.error.title", isPresented: Binding(
           get: { viewModel.errorMessage != nil },
           set: { if !$0 { viewModel.errorMessage = nil } }
         )) {
-          Button("확인", role: .cancel) { }
+          Button("common.confirm", role: .cancel) { }
         } message: {
           Text(viewModel.errorMessage ?? "")
         }

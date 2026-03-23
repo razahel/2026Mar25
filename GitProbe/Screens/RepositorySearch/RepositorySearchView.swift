@@ -5,7 +5,7 @@ struct RepositorySearchView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("Search")
+      Text("search.title")
         .font(.largeTitle)
         .bold()
         .padding(.top, 8)
@@ -13,7 +13,7 @@ struct RepositorySearchView: View {
       HStack(spacing: 8) {
         Image(systemName: "magnifyingglass")
           .foregroundStyle(.secondary)
-        TextField("저장소 검색", text: $viewModel.query)
+        TextField("search.placeholder", text: $viewModel.query)
           .submitLabel(.search)
           .onSubmit {
             viewModel.didTapSearch()
@@ -63,11 +63,11 @@ struct RepositorySearchView: View {
   private var recentSearchView: some View {
     VStack(alignment: .leading, spacing: 10) {
       HStack {
-        Text("최근 검색")
+        Text("recent.title")
           .font(.headline)
         Spacer()
         if !viewModel.recentSearches.isEmpty {
-          Button("전체삭제") {
+          Button("recent.delete_all") {
             viewModel.deleteAllRecentSearches()
           }
           .font(.caption)
@@ -123,7 +123,7 @@ struct RepositorySearchView: View {
   
   private var resultView: some View {
     VStack(alignment: .leading, spacing: 6) {
-      Text("\(viewModel.totalCount) repository results")
+      Text(viewModel.localizedResultCountText)
         .font(.caption)
         .foregroundStyle(.secondary)
       

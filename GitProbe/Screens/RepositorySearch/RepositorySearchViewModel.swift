@@ -66,7 +66,7 @@ final class RepositorySearchViewModel: ObservableObject {
       try recentSearchRepository.delete(keyword: keyword)
       refreshRecentSearches()
     } catch {
-      errorMessage = "최근 검색어 삭제에 실패했습니다."
+      errorMessage = String(localized: "error.recent.delete")
     }
   }
   
@@ -75,7 +75,7 @@ final class RepositorySearchViewModel: ObservableObject {
       try recentSearchRepository.deleteAll()
       refreshRecentSearches()
     } catch {
-      errorMessage = "전체 삭제에 실패했습니다."
+      errorMessage = String(localized: "error.recent.delete_all")
     }
   }
   
@@ -111,7 +111,7 @@ final class RepositorySearchViewModel: ObservableObject {
         ? []
         : recentSearches.filter { $0.keyword.localizedCaseInsensitiveContains(keyword) }
     } catch {
-      errorMessage = "최근 검색어를 불러오지 못했습니다."
+      errorMessage = String(localized: "error.recent.fetch")
     }
   }
   
@@ -123,7 +123,7 @@ final class RepositorySearchViewModel: ObservableObject {
       try recentSearchRepository.save(keyword: trimmed)
       refreshRecentSearches()
     } catch {
-      errorMessage = "최근 검색어 저장에 실패했습니다."
+      errorMessage = String(localized: "error.recent.save")
     }
     
     await fetchPage(page: 1, reset: true)
@@ -160,8 +160,13 @@ final class RepositorySearchViewModel: ObservableObject {
       }
       hasMore = repositories.count < totalCount
     } catch {
-      errorMessage = "검색 중 오류가 발생했습니다."
+      errorMessage = String(localized: "error.search")
     }
+  }
+  
+  var localizedResultCountText: String {
+    let format = String(localized: "search.result.count.format")
+    return String(format: format, locale: Locale.current, totalCount)
   }
   
   private static let dateFormatter: DateFormatter = {
