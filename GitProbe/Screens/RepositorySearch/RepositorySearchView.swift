@@ -3,12 +3,9 @@ import SwiftUI
 struct RepositorySearchView: View {
   @StateObject private var viewModel: RepositorySearchViewModel
   
-  init(repositorySearchService: RepositorySearchService, recentSearchRepository: RecentSearchRepository) {
+  init(viewModel: RepositorySearchViewModel) {
     _viewModel = StateObject(
-      wrappedValue: RepositorySearchViewModel(
-        repositorySearchService: repositorySearchService,
-        recentSearchRepository: recentSearchRepository
-      )
+      wrappedValue: viewModel
     )
   }
   

@@ -11,10 +11,11 @@ struct RepositorySearchScreen: View {
   
   var body: some View {
     NavigationStack {
-      RepositorySearchView(
+      let viewModel = RepositorySearchViewModel(
         repositorySearchService: repositorySearchService,
         recentSearchRepository: SwiftDataRecentSearchRepository(modelContext: modelContext)
       )
+      RepositorySearchView(viewModel: viewModel)
     }
   }
 }
