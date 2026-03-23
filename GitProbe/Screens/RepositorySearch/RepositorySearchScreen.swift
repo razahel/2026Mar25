@@ -3,27 +3,27 @@ import SwiftData
 
 struct SearchScreen: View {
   @Environment(\.modelContext) private var modelContext
-  private let githubService: GithubServiceProtocol
+  private let repositorySearchService: RepositorySearchService
   
-  init(githubService: GithubServiceProtocol) {
-    self.githubService = githubService
+  init(repositorySearchService: RepositorySearchService) {
+    self.repositorySearchService = repositorySearchService
   }
   
   var body: some View {
-    SearchScreenContainer(
-      githubService: githubService,
+    RepositorySearchScreenContainer(
+      repositorySearchService: repositorySearchService,
       recentSearchRepository: SwiftDataRecentSearchRepository(modelContext: modelContext)
     )
   }
 }
 
-private struct SearchScreenContainer: View {
-  @StateObject private var viewModel: SearchViewModel
+private struct RepositorySearchScreenContainer: View {
+  @StateObject private var viewModel: RepositorySearchViewModel
   
-  init(githubService: GithubServiceProtocol, recentSearchRepository: RecentSearchRepositoryProtocol) {
+  init(repositorySearchService: RepositorySearchService, recentSearchRepository: RecentSearchRepositoryProtocol) {
     _viewModel = StateObject(
-      wrappedValue: SearchViewModel(
-        githubService: githubService,
+      wrappedValue: RepositorySearchViewModel(
+        repositorySearchService: repositorySearchService,
         recentSearchRepository: recentSearchRepository
       )
     )
@@ -31,7 +31,7 @@ private struct SearchScreenContainer: View {
   
   var body: some View {
     NavigationStack {
-      SearchView(viewModel: viewModel)
+      RepositorySearchView(viewModel: viewModel)
         .onAppear {
           viewModel.onAppear()
         }

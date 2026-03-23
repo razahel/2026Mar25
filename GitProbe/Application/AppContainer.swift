@@ -2,12 +2,12 @@ import Foundation
 
 struct AppContainer {
   let httpClient: HTTPClient
-  let githubService: GithubServiceProtocol
+  let searchService: RepositorySearchService
   
   init() {
     let session = URLSession(configuration: .default)
     let client = URLSessionHTTPClient(session: session)
     self.httpClient = client
-    self.githubService = GithubService(httpClient: client)
+    self.searchService = RepositorySearchServiceImpl(httpClient: client)
   }
 }

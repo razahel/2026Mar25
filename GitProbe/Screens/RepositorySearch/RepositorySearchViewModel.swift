@@ -2,9 +2,9 @@ import Combine
 import Foundation
 
 @MainActor
-final class SearchViewModel: ObservableObject {
+final class RepositorySearchViewModel: ObservableObject {
   @Published var query: String = ""
-  @Published private(set) var repositories: [GitRepository] = []
+  @Published private(set) var repositories: [RepositorySearchItem] = []
   @Published private(set) var totalCount: Int = 0
   @Published private(set) var isInitialLoading: Bool = false
   @Published private(set) var isNextPageLoading: Bool = false
@@ -20,15 +20,16 @@ final class SearchViewModel: ObservableObject {
     !showRecentSearches && !autocompleteItems.isEmpty
   }
   
-  private let githubService: GithubServiceProtocol
+  private let repositorySearchService: RepositorySearchService
   private let recentSearchRepository: RecentSearchRepositoryProtocol
   private var currentPage: Int = 1
   private var hasMore: Bool = true
   private var cancellables = Set<AnyCancellable>()
   
-  init(githubService: GithubServiceProtocol, recentSearchRepository: RecentSearchRepositoryProtocol) {
-    self.githubService = githubService
+  init(repositorySearchService: RepositorySearchService, recentSearchRepository: RecentSearchRepositoryProtocol) {
+    self.repositorySearchService = repositorySearchService
     self.recentSearchRepository = recentSearchRepository
+    
     bindQuery()
   }
   
@@ -50,7 +51,7 @@ final class SearchViewModel: ObservableObject {
     Task { await search(with: item.keyword) }
   }
   
-  func loadNextPageIfNeeded(currentItem item: GitRepository) {
+  func loadNextPageIfNeeded(currentItem item: RepositorySearchItem) {
     guard hasMore, !isInitialLoading, !isNextPageLoading else { return }
     guard let index = repositories.firstIndex(where: { $0.id == item.id }) else { return }
     
@@ -148,7 +149,7 @@ final class SearchViewModel: ObservableObject {
     }
     
     do {
-      let response = try await githubService.searchRepositories(keyword: query, page: page)
+      let response = try await repositorySearchService.searchRepositories(keyword: query, page: page)
       totalCount = response.totalCount
       currentPage = page
       

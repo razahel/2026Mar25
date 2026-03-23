@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct SearchView: View {
-  @ObservedObject var viewModel: SearchViewModel
+struct RepositorySearchView: View {
+  @ObservedObject var viewModel: RepositorySearchViewModel
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -128,14 +128,14 @@ struct SearchView: View {
         .foregroundStyle(.secondary)
       
       List {
-        ForEach(viewModel.repositories) { repository in
+        ForEach(viewModel.repositories) { item in
           NavigationLink {
-            RepositoryWebScreen(repositoryURL: repository.htmlURL)
+            RepositoryWebScreen(repositoryURL: item.htmlURL)
           } label: {
-            RepositoryRowView(repository: repository)
+            RepositoryRowView(item: item)
           }
           .onAppear {
-            viewModel.loadNextPageIfNeeded(currentItem: repository)
+            viewModel.loadNextPageIfNeeded(currentItem: item)
           }
         }
         
@@ -153,11 +153,11 @@ struct SearchView: View {
 }
 
 private struct RepositoryRowView: View {
-  let repository: GitRepository
+  let item: RepositorySearchItem
   
   var body: some View {
     HStack(spacing: 10) {
-      AsyncImage(url: repository.owner.avatarURL) { phase in
+      AsyncImage(url: item.owner.avatarURL) { phase in
         switch phase {
         case .success(let image):
           image.resizable().scaledToFill()
@@ -169,10 +169,10 @@ private struct RepositoryRowView: View {
       .clipShape(Circle())
       
       VStack(alignment: .leading, spacing: 2) {
-        Text(repository.name)
+        Text(item.name)
           .font(.headline)
           .foregroundStyle(.primary)
-        Text(repository.owner.login)
+        Text(item.owner.login)
           .font(.subheadline)
           .foregroundStyle(.secondary)
       }
