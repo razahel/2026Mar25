@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-enum L10N: String {
+enum Localizable: String {
   case searchTitle = "search.title"
   case searchPlaceholder = "search.placeholder"
   case recentTitle = "recent.title"

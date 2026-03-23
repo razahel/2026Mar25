@@ -66,7 +66,7 @@ final class RepositorySearchViewModel: ObservableObject {
       try recentSearchRepository.delete(keyword: keyword)
       refreshRecentSearches()
     } catch {
-      errorMessage = L10N.errorRecentDelete.string
+      errorMessage = Localizable.errorRecentDelete.string
     }
   }
   
@@ -75,7 +75,7 @@ final class RepositorySearchViewModel: ObservableObject {
       try recentSearchRepository.deleteAll()
       refreshRecentSearches()
     } catch {
-      errorMessage = L10N.errorRecentDeleteAll.string
+      errorMessage = Localizable.errorRecentDeleteAll.string
     }
   }
   
@@ -111,7 +111,7 @@ final class RepositorySearchViewModel: ObservableObject {
         ? []
         : recentSearches.filter { $0.keyword.localizedCaseInsensitiveContains(keyword) }
     } catch {
-      errorMessage = L10N.errorRecentFetch.string
+      errorMessage = Localizable.errorRecentFetch.string
     }
   }
   
@@ -123,7 +123,7 @@ final class RepositorySearchViewModel: ObservableObject {
       try recentSearchRepository.save(keyword: trimmed)
       refreshRecentSearches()
     } catch {
-      errorMessage = L10N.errorRecentSave.string
+      errorMessage = Localizable.errorRecentSave.string
     }
     
     await fetchPage(page: 1, reset: true)
@@ -160,12 +160,12 @@ final class RepositorySearchViewModel: ObservableObject {
       }
       hasMore = repositories.count < totalCount
     } catch {
-      errorMessage = L10N.errorSearch.string
+      errorMessage = Localizable.errorSearch.string
     }
   }
   
   var localizedResultCountText: String {
-    let format = L10N.searchResultCountFormat.string
+    let format = Localizable.searchResultCountFormat.string
     return String(format: format, locale: Locale.current, totalCount)
   }
   

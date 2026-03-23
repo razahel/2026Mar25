@@ -14,7 +14,7 @@ struct RepositorySearchView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text(L10N.searchTitle.text)
+      Text(Localizable.searchTitle.text)
         .font(.largeTitle)
         .bold()
         .padding(.top, 8)
@@ -27,11 +27,11 @@ struct RepositorySearchView: View {
     .onAppear {
       viewModel.onAppear()
     }
-    .alert(L10N.commonErrorTitle.text, isPresented: Binding(
+    .alert(Localizable.commonErrorTitle.text, isPresented: Binding(
       get: { viewModel.errorMessage != nil },
       set: { if !$0 { viewModel.errorMessage = nil } }
     )) {
-      Button(L10N.commonConfirm.text, role: .cancel) { }
+      Button(Localizable.commonConfirm.text, role: .cancel) { }
     } message: {
       Text(viewModel.errorMessage ?? "")
     }
@@ -39,9 +39,9 @@ struct RepositorySearchView: View {
   
   private var searchInputView: some View {
     HStack(spacing: 8) {
-      Image(systemName: "magnifyingglass")
+      Image(systemName: Assets.magnifyingglass.name)
         .foregroundStyle(.secondary)
-      TextField(L10N.searchPlaceholder.text, text: $viewModel.query)
+      TextField(Localizable.searchPlaceholder.text, text: $viewModel.query)
         .submitLabel(.search)
         .onSubmit {
           viewModel.didTapSearch()
@@ -51,7 +51,7 @@ struct RepositorySearchView: View {
         Button {
           viewModel.query = ""
         } label: {
-          Image(systemName: "xmark.circle.fill")
+          Image(systemName: Assets.xmarkCircleFill.name)
             .foregroundStyle(.secondary)
         }
         .buttonStyle(.plain)
@@ -85,11 +85,11 @@ struct RepositorySearchView: View {
   private var recentSearchView: some View {
     VStack(alignment: .leading, spacing: 10) {
       HStack {
-        Text(L10N.recentTitle.text)
+        Text(Localizable.recentTitle.text)
           .font(.headline)
         Spacer()
         if !viewModel.recentSearches.isEmpty {
-          Button(L10N.recentDeleteAll.text) {
+          Button(Localizable.recentDeleteAll.text) {
             viewModel.deleteAllRecentSearches()
           }
           .font(.caption)
@@ -110,7 +110,7 @@ struct RepositorySearchView: View {
           Button {
             viewModel.deleteRecentSearch(keyword: item.keyword)
           } label: {
-            Image(systemName: "xmark")
+            Image(systemName: Assets.xmark.name)
               .foregroundStyle(.secondary)
           }
           .buttonStyle(.plain)
