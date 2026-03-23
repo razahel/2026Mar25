@@ -37,21 +37,21 @@ final class RepositorySearchViewModel: ObservableObject {
     refreshRecentSearches()
   }
   
-  func didTapSearch() {
+  func onTapSearch() {
     Task { await search(with: query) }
   }
   
-  func didTapRecentSearch(_ item: RecentSearchItem) {
+  func onTapRecentSearch(_ item: RecentSearchItem) {
     query = item.keyword
     Task { await search(with: item.keyword) }
   }
   
-  func didTapAutocomplete(_ item: RecentSearchItem) {
+  func onTapAutocomplete(_ item: RecentSearchItem) {
     query = item.keyword
     Task { await search(with: item.keyword) }
   }
   
-  func loadNextPageIfNeeded(currentItem item: RepositorySearchItem) {
+  func onAppearRepositoryItem(_ item: RepositorySearchItem) {
     guard hasMore, !isInitialLoading, !isNextPageLoading else { return }
     guard let index = repositories.firstIndex(where: { $0.id == item.id }) else { return }
     
@@ -61,7 +61,7 @@ final class RepositorySearchViewModel: ObservableObject {
     Task { await fetchPage(page: currentPage + 1, reset: false) }
   }
   
-  func deleteRecentSearch(keyword: String) {
+  func onTapDeleteRecentSearch(keyword: String) {
     do {
       try recentSearchRepository.delete(keyword: keyword)
       refreshRecentSearches()
@@ -70,7 +70,7 @@ final class RepositorySearchViewModel: ObservableObject {
     }
   }
   
-  func deleteAllRecentSearches() {
+  func onTapDeleteAllRecentSearches() {
     do {
       try recentSearchRepository.deleteAll()
       refreshRecentSearches()

@@ -41,7 +41,7 @@ struct RepositorySearchView: View {
       TextField(Localizable.searchPlaceholder.text, text: $viewModel.query)
         .submitLabel(.search)
         .onSubmit {
-          viewModel.didTapSearch()
+          viewModel.onTapSearch()
         }
       
       if !viewModel.query.isEmpty {
@@ -87,7 +87,7 @@ struct RepositorySearchView: View {
         Spacer()
         if !viewModel.recentSearches.isEmpty {
           Button(Localizable.recentDeleteAll.text) {
-            viewModel.deleteAllRecentSearches()
+            viewModel.onTapDeleteAllRecentSearches()
           }
           .font(.caption)
           .foregroundStyle(.pink)
@@ -97,7 +97,7 @@ struct RepositorySearchView: View {
       ForEach(viewModel.recentSearches) { item in
         HStack {
           Button(item.keyword) {
-            viewModel.didTapRecentSearch(item)
+            viewModel.onTapRecentSearch(item)
           }
           .buttonStyle(.plain)
           .foregroundStyle(.primary)
@@ -105,7 +105,7 @@ struct RepositorySearchView: View {
           Spacer()
           
           Button {
-            viewModel.deleteRecentSearch(keyword: item.keyword)
+            viewModel.onTapDeleteRecentSearch(keyword: item.keyword)
           } label: {
             Image(systemName: Assets.xmark.name)
               .foregroundStyle(.secondary)
@@ -123,7 +123,7 @@ struct RepositorySearchView: View {
     List {
       ForEach(viewModel.autocompleteItems) { item in
         Button {
-          viewModel.didTapAutocomplete(item)
+          viewModel.onTapAutocomplete(item)
         } label: {
           HStack {
             Text(item.keyword)
@@ -154,7 +154,7 @@ struct RepositorySearchView: View {
             RepositoryRowView(item: item)
           }
           .onAppear {
-            viewModel.loadNextPageIfNeeded(currentItem: item)
+            viewModel.onAppearRepositoryItem(item)
           }
         }
         
