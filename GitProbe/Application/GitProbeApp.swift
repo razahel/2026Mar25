@@ -14,7 +14,7 @@ struct GitProbeApp: App {
   
   var sharedModelContainer: ModelContainer = {
     let schema = Schema([
-      RecentSearch.self,
+      RecentSearchSchema.self,
     ])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
     

@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class RecentSearch {
+final class RecentSearchSchema {
   var keyword: String
   var searchedAt: Date
   
@@ -10,10 +10,4 @@ final class RecentSearch {
     self.keyword = keyword
     self.searchedAt = searchedAt
   }
-}
-
-struct RecentSearchItem: Identifiable, Hashable {
-  var id: String { keyword }
-  let keyword: String
-  let searchedAt: Date
 }

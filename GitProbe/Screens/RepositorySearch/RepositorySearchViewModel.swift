@@ -21,12 +21,12 @@ final class RepositorySearchViewModel: ObservableObject {
   }
   
   private let repositorySearchService: RepositorySearchService
-  private let recentSearchRepository: RecentSearchRepositoryProtocol
+  private let recentSearchRepository: RecentSearchRepository
   private var currentPage: Int = 1
   private var hasMore: Bool = true
   private var cancellables = Set<AnyCancellable>()
   
-  init(repositorySearchService: RepositorySearchService, recentSearchRepository: RecentSearchRepositoryProtocol) {
+  init(repositorySearchService: RepositorySearchService, recentSearchRepository: RecentSearchRepository) {
     self.repositorySearchService = repositorySearchService
     self.recentSearchRepository = recentSearchRepository
     
