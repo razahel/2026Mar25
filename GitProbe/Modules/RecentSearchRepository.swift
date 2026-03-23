@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-protocol RecentSearchRepository {
+protocol RepositorySearchLocalDataService {
   func fetchRecentSearches() throws -> [RecentSearchItem]
   func save(keyword: String) throws
   func delete(keyword: String) throws
@@ -15,19 +15,19 @@ struct RecentSearchItem: Identifiable, Hashable {
 }
 
 @MainActor
-final class SwiftDataRecentSearchRepository: RecentSearchRepository {
-  private let modelContext: ModelContext
+final class RepositorySearchLocalDataServiceImpl: RepositorySearchLocalDataService {
+  private let localDataClient: LocalDataClient
   private let maxCount = 10
   
-  init(modelContext: ModelContext) {
-    self.modelContext = modelContext
+  init(localDataClient: LocalDataClient) {
+    self.localDataClient = localDataClient
   }
   
   func fetchRecentSearches() throws -> [RecentSearchItem] {
     let descriptor = FetchDescriptor<RecentSearchSchema>(
       sortBy: [SortDescriptor(\.searchedAt, order: .reverse)]
     )
-    let entities = try modelContext.fetch(descriptor)
+    let entities = try localDataClient.fetch(descriptor)
     return entities.map { RecentSearchItem(keyword: $0.keyword, searchedAt: $0.searchedAt) }
   }
   
@@ -35,39 +35,39 @@ final class SwiftDataRecentSearchRepository: RecentSearchRepository {
     let normalized = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !normalized.isEmpty else { return }
     
-    let all = try modelContext.fetch(FetchDescriptor<RecentSearchSchema>())
+    let all = try localDataClient.fetch(FetchDescriptor<RecentSearchSchema>())
     if let existing = all.first(where: { $0.keyword.caseInsensitiveCompare(normalized) == .orderedSame }) {
       existing.searchedAt = Date()
       existing.keyword = normalized
     } else {
-      modelContext.insert(RecentSearchSchema(keyword: normalized, searchedAt: Date()))
+      localDataClient.insert(RecentSearchSchema(keyword: normalized, searchedAt: Date()))
     }
     
-    let sorted = try modelContext.fetch(
+    let sorted = try localDataClient.fetch(
       FetchDescriptor<RecentSearchSchema>(sortBy: [SortDescriptor(\.searchedAt, order: .reverse)])
     )
     if sorted.count > maxCount {
       for overflow in sorted[maxCount...] {
-        modelContext.delete(overflow)
+        localDataClient.delete(overflow)
       }
     }
     
-    try modelContext.save()
+    try localDataClient.save()
   }
   
   func delete(keyword: String) throws {
-    let all = try modelContext.fetch(FetchDescriptor<RecentSearchSchema>())
+    let all = try localDataClient.fetch(FetchDescriptor<RecentSearchSchema>())
     for entity in all where entity.keyword == keyword {
-      modelContext.delete(entity)
+      localDataClient.delete(entity)
     }
-    try modelContext.save()
+    try localDataClient.save()
   }
   
   func deleteAll() throws {
-    let all = try modelContext.fetch(FetchDescriptor<RecentSearchSchema>())
+    let all = try localDataClient.fetch(FetchDescriptor<RecentSearchSchema>())
     for entity in all {
-      modelContext.delete(entity)
+      localDataClient.delete(entity)
     }
-    try modelContext.save()
+    try localDataClient.save()
   }
 }

@@ -21,14 +21,14 @@ final class RepositorySearchViewModel: ObservableObject {
   }
   
   private let repositorySearchService: RepositorySearchService
-  private let recentSearchRepository: RecentSearchRepository
+  private let localDataService: RepositorySearchLocalDataService
   private var currentPage: Int = 1
   private var hasMore: Bool = true
   private var cancellables = Set<AnyCancellable>()
   
-  init(repositorySearchService: RepositorySearchService, recentSearchRepository: RecentSearchRepository) {
+  init(repositorySearchService: RepositorySearchService, localDataService: RepositorySearchLocalDataService) {
     self.repositorySearchService = repositorySearchService
-    self.recentSearchRepository = recentSearchRepository
+    self.localDataService = localDataService
     
     bindQuery()
   }
@@ -63,7 +63,7 @@ final class RepositorySearchViewModel: ObservableObject {
   
   func onTapDeleteRecentSearch(keyword: String) {
     do {
-      try recentSearchRepository.delete(keyword: keyword)
+      try localDataService.delete(keyword: keyword)
       refreshRecentSearches()
     } catch {
       errorMessage = Localizable.errorRecentDelete.string
@@ -72,7 +72,7 @@ final class RepositorySearchViewModel: ObservableObject {
   
   func onTapDeleteAllRecentSearches() {
     do {
-      try recentSearchRepository.deleteAll()
+      try localDataService.deleteAll()
       refreshRecentSearches()
     } catch {
       errorMessage = Localizable.errorRecentDeleteAll.string
@@ -104,7 +104,7 @@ final class RepositorySearchViewModel: ObservableObject {
   
   private func refreshRecentSearches() {
     do {
-      recentSearches = try recentSearchRepository.fetchRecentSearches()
+      recentSearches = try localDataService.fetchRecentSearches()
       // 최근 검색어가 변경되면 자동완성도 즉시 반영합니다.
       let keyword = query.trimmingCharacters(in: .whitespacesAndNewlines)
       autocompleteItems = keyword.isEmpty
@@ -120,7 +120,7 @@ final class RepositorySearchViewModel: ObservableObject {
     guard !trimmed.isEmpty else { return }
     
     do {
-      try recentSearchRepository.save(keyword: trimmed)
+      try localDataService.save(keyword: trimmed)
       refreshRecentSearches()
     } catch {
       errorMessage = Localizable.errorRecentSave.string

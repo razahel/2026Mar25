@@ -11,9 +11,11 @@ struct RepositorySearchScreen: View {
   
   var body: some View {
     NavigationStack {
+      let localDataClient = SwiftDataLocalDataClient(modelContext: modelContext)
+      let localDataService = RepositorySearchLocalDataServiceImpl(localDataClient: localDataClient)
       let viewModel = RepositorySearchViewModel(
         repositorySearchService: repositorySearchService,
-        recentSearchRepository: SwiftDataRecentSearchRepository(modelContext: modelContext)
+        localDataService: localDataService
       )
       RepositorySearchView(viewModel: viewModel)
     }
