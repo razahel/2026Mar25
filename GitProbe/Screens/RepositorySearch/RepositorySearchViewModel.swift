@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-import SwiftUI
 
 @MainActor
 final class RepositorySearchViewModel: ObservableObject {
@@ -19,6 +18,10 @@ final class RepositorySearchViewModel: ObservableObject {
   
   var showAutocomplete: Bool {
     showRecentSearches == false && autocompleteItems.isEmpty == false
+  }
+  
+  var repositorWebDependency: RepositoryWebDependency {
+    return component
   }
   
   private let component: RepositorySearchComponent
@@ -52,10 +55,6 @@ final class RepositorySearchViewModel: ObservableObject {
   func onTapAutocomplete(_ item: RecentSearchItem) {
     query = item.keyword
     Task { await search(with: item.keyword) }
-  }
-  
-  func onTapRepositoryItem(_ item: RepositorySearchItem) -> some View {
-    RepositoryWebScreen(dependency: component, url: item.htmlURL)
   }
   
   func onAppearRepositoryItem(_ item: RepositorySearchItem) {

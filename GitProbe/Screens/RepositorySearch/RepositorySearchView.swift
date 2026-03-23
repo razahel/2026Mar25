@@ -143,7 +143,7 @@ struct RepositorySearchView: View {
       List {
         ForEach(viewModel.repositories) { item in
           NavigationLink {
-            viewModel.onTapRepositoryItem(item)
+            RepositoryWebScreen(dependency: viewModel.repositorWebDependency, url: item.htmlURL)
           } label: {
             RepositoryRowView(item: item)
           }
