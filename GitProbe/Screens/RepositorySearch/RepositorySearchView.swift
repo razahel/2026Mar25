@@ -1,7 +1,16 @@
 import SwiftUI
 
 struct RepositorySearchView: View {
-  @ObservedObject var viewModel: RepositorySearchViewModel
+  @StateObject private var viewModel: RepositorySearchViewModel
+  
+  init(repositorySearchService: RepositorySearchService, recentSearchRepository: RecentSearchRepositoryProtocol) {
+    _viewModel = StateObject(
+      wrappedValue: RepositorySearchViewModel(
+        repositorySearchService: repositorySearchService,
+        recentSearchRepository: recentSearchRepository
+      )
+    )
+  }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -39,6 +48,17 @@ struct RepositorySearchView: View {
     .padding(.horizontal, 16)
     .navigationTitle("")
     .navigationBarTitleDisplayMode(.inline)
+    .onAppear {
+      viewModel.onAppear()
+    }
+    .alert(L10N.commonErrorTitle.text, isPresented: Binding(
+      get: { viewModel.errorMessage != nil },
+      set: { if !$0 { viewModel.errorMessage = nil } }
+    )) {
+      Button(L10N.commonConfirm.text, role: .cancel) { }
+    } message: {
+      Text(viewModel.errorMessage ?? "")
+    }
   }
   
   @ViewBuilder
