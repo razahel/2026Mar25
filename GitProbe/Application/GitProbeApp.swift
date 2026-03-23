@@ -31,9 +31,11 @@ struct GitProbeApp: App {
   
   var body: some Scene {
     WindowGroup {
-      RepositorySearchScreen(
-        component: RepositorySearchComponent(dependency: appComponent)
-      )
+      NavigationStack {
+        RepositorySearchScreen(
+          component: RepositorySearchComponent(dependency: appComponent)
+        )
+      }
     }
     .modelContainer(sharedModelContainer)
   }

@@ -10,15 +10,13 @@ struct RepositorySearchScreen: View {
   }
   
   var body: some View {
-    NavigationStack {
-      let apiService = component.makeAPIService()
-      let localDataClient = SwiftDataLocalDataClient(modelContext: modelContext)
-      let localDataService = RepositorySearchLocalDataServiceImpl(localDataClient: localDataClient)
-      let viewModel = RepositorySearchViewModel(
-        repositorySearchAPIService: apiService,
-        localDataService: localDataService
-      )
-      RepositorySearchView(viewModel: viewModel)
-    }
+    let apiService = component.makeAPIService()
+    let localDataClient = SwiftDataLocalDataClient(modelContext: modelContext)
+    let localDataService = RepositorySearchLocalDataServiceImpl(localDataClient: localDataClient)
+    let viewModel = RepositorySearchViewModel(
+      repositorySearchAPIService: apiService,
+      localDataService: localDataService
+    )
+    return RepositorySearchView(viewModel: viewModel)
   }
 }
