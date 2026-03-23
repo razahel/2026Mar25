@@ -8,14 +8,18 @@
 import SwiftUI
 import SwiftData
 
+struct AppComponent: RepositorySearchDependency {
+  let httpClient: HTTPClient = {
+    return URLSessionHTTPClient(session: URLSession(configuration: .default))
+  }()
+}
+
 @main
 struct GitProbeApp: App {
-  private let appContainer = AppContainer()
+  private let appComponent = AppComponent()
   
   var sharedModelContainer: ModelContainer = {
-    let schema = Schema([
-      RecentSearchSchema.self,
-    ])
+    let schema = Schema([RecentSearchSchema.self])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
     
     do {
@@ -27,8 +31,11 @@ struct GitProbeApp: App {
   
   var body: some Scene {
     WindowGroup {
-      RepositorySearchScreen(httpClient: appContainer.httpClient)
+      RepositorySearchScreen(
+        component: RepositorySearchComponent(dependency: appComponent)
+      )
     }
     .modelContainer(sharedModelContainer)
   }
 }
+

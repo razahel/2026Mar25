@@ -26,7 +26,7 @@ struct RepositorySearchView: View {
     }
     .alert(Localizable.commonErrorTitle.text, isPresented: Binding(
       get: { viewModel.errorMessage != nil },
-      set: { if !$0 { viewModel.errorMessage = nil } }
+      set: { if $0 == false { viewModel.errorMessage = nil } }
     )) {
       Button(Localizable.commonConfirm.text, role: .cancel) { }
     } message: {
@@ -44,7 +44,7 @@ struct RepositorySearchView: View {
           viewModel.onTapSearch()
         }
       
-      if !viewModel.query.isEmpty {
+      if viewModel.query.isEmpty == false {
         Button {
           viewModel.query = ""
         } label: {
@@ -85,7 +85,7 @@ struct RepositorySearchView: View {
         Text(Localizable.recentTitle.text)
           .font(.headline)
         Spacer()
-        if !viewModel.recentSearches.isEmpty {
+        if viewModel.recentSearches.isEmpty == false {
           Button(Localizable.recentDeleteAll.text) {
             viewModel.onTapDeleteAllRecentSearches()
           }

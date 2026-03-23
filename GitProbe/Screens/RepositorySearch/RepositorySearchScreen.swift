@@ -3,15 +3,15 @@ import SwiftData
 
 struct RepositorySearchScreen: View {
   @Environment(\.modelContext) private var modelContext
-  private let httpClient: HTTPClient
+  private let component: RepositorySearchComponent
   
-  init(httpClient: HTTPClient) {
-    self.httpClient = httpClient
+  init(component: RepositorySearchComponent) {
+    self.component = component
   }
   
   var body: some View {
     NavigationStack {
-      let apiService = RepositorySearchAPIServiceImpl(httpClient: httpClient)
+      let apiService = component.makeAPIService()
       let localDataClient = SwiftDataLocalDataClient(modelContext: modelContext)
       let localDataService = RepositorySearchLocalDataServiceImpl(localDataClient: localDataClient)
       let viewModel = RepositorySearchViewModel(

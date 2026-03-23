@@ -17,7 +17,7 @@ final class RepositorySearchViewModel: ObservableObject {
   }
   
   var showAutocomplete: Bool {
-    !showRecentSearches && !autocompleteItems.isEmpty
+    showRecentSearches == false && autocompleteItems.isEmpty == false
   }
   
   private let repositorySearchAPIService: RepositorySearchAPIService
@@ -52,7 +52,7 @@ final class RepositorySearchViewModel: ObservableObject {
   }
   
   func onAppearRepositoryItem(_ item: RepositorySearchItem) {
-    guard hasMore, !isInitialLoading, !isNextPageLoading else { return }
+    guard hasMore, isInitialLoading == false, isNextPageLoading == false else { return }
     guard let index = repositories.firstIndex(where: { $0.id == item.id }) else { return }
     
     let triggerIndex = repositories.count / 2
@@ -117,7 +117,7 @@ final class RepositorySearchViewModel: ObservableObject {
   
   private func search(with keyword: String) async {
     let trimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty else { return }
+    guard trimmed.isEmpty == false else { return }
     
     do {
       try localDataService.save(keyword: trimmed)

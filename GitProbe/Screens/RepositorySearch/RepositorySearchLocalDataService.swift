@@ -33,7 +33,7 @@ final class RepositorySearchLocalDataServiceImpl: RepositorySearchLocalDataServi
   
   func save(keyword: String) throws {
     let normalized = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !normalized.isEmpty else { return }
+    guard normalized.isEmpty == false else { return }
     
     let all = try localDataClient.fetch(FetchDescriptor<RecentSearchSchema>())
     if let existing = all.first(where: { $0.keyword.caseInsensitiveCompare(normalized) == .orderedSame }) {
