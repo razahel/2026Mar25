@@ -18,31 +18,7 @@ struct RepositorySearchView: View {
         .font(.largeTitle)
         .bold()
         .padding(.top, 8)
-      
-      HStack(spacing: 8) {
-        Image(systemName: "magnifyingglass")
-          .foregroundStyle(.secondary)
-        TextField(L10N.searchPlaceholder.text, text: $viewModel.query)
-          .submitLabel(.search)
-          .onSubmit {
-            viewModel.didTapSearch()
-          }
-        
-        if !viewModel.query.isEmpty {
-          Button {
-            viewModel.query = ""
-          } label: {
-            Image(systemName: "xmark.circle.fill")
-              .foregroundStyle(.secondary)
-          }
-          .buttonStyle(.plain)
-        }
-      }
-      .padding(.horizontal, 10)
-      .padding(.vertical, 8)
-      .background(Color(.secondarySystemFill))
-      .clipShape(RoundedRectangle(cornerRadius: 8))
-      
+      searchInputView
       contentView
     }
     .padding(.horizontal, 16)
@@ -59,6 +35,32 @@ struct RepositorySearchView: View {
     } message: {
       Text(viewModel.errorMessage ?? "")
     }
+  }
+  
+  private var searchInputView: some View {
+    HStack(spacing: 8) {
+      Image(systemName: "magnifyingglass")
+        .foregroundStyle(.secondary)
+      TextField(L10N.searchPlaceholder.text, text: $viewModel.query)
+        .submitLabel(.search)
+        .onSubmit {
+          viewModel.didTapSearch()
+        }
+      
+      if !viewModel.query.isEmpty {
+        Button {
+          viewModel.query = ""
+        } label: {
+          Image(systemName: "xmark.circle.fill")
+            .foregroundStyle(.secondary)
+        }
+        .buttonStyle(.plain)
+      }
+    }
+    .padding(.horizontal, 10)
+    .padding(.vertical, 8)
+    .background(Color(.secondarySystemFill))
+    .clipShape(RoundedRectangle(cornerRadius: 8))
   }
   
   @ViewBuilder
