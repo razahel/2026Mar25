@@ -11,6 +11,14 @@ struct RepositorySearchView: View {
   @ObservedObject var viewModel: RepositorySearchViewModel
   @FocusState private var isSearchFieldFocused: Bool
   
+  private struct Constant {
+    static let dateFormatter: DateFormatter = {
+      let formatter = DateFormatter()
+      formatter.dateFormat = "MM. dd."
+      return formatter
+    }()
+  }
+
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       titleView
@@ -149,7 +157,7 @@ struct RepositorySearchView: View {
             Text(item.keyword)
               .foregroundStyle(.primary)
             Spacer()
-            Text(viewModel.formattedDate(item.searchedAt))
+            Text(Constant.dateFormatter.string(from: item.searchedAt))
               .foregroundStyle(.secondary)
               .font(.caption)
           }

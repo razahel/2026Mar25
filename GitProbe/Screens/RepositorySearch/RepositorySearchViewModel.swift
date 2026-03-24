@@ -37,12 +37,6 @@ final class RepositorySearchViewModel: ObservableObject {
   private var hasMore = true
   private var cancellables = Set<AnyCancellable>()
   
-  private static let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "MM. dd."
-    return formatter
-  }()
-
   init(component: RepositorySearchComponent) {
     self.component = component
     self.apiService = component.apiService
@@ -110,10 +104,6 @@ final class RepositorySearchViewModel: ObservableObject {
     } catch {
       errorMessage = Localizable.errorRecentDeleteAll.string
     }
-  }
-  
-  func formattedDate(_ date: Date) -> String {
-    Self.dateFormatter.string(from: date)
   }
   
   private func bindQuery() {
