@@ -12,8 +12,10 @@ import Combine
 final class RepositoryWebViewModel: ObservableObject {
   @Published var url: URL
   @Published var isLoading = true
+  let repository: RepositorySearchItem
   
-  init(component: RepositoryWebComponent, url: URL) {
+  init(component: RepositoryWebComponent, url: URL, repository: RepositorySearchItem) {
     self.url = url
+    self.repository = repository
   }
 }
