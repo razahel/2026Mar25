@@ -117,6 +117,7 @@ struct RepositorySearchView: View {
             .foregroundStyle(.pink)
           }
         }
+        .frame(height: 30)
 
         if viewModel.recentSearches.isEmpty {
           Text(Localizable.searchPlaceholder.string)
