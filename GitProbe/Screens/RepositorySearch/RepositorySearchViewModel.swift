@@ -13,7 +13,6 @@ enum RepositorySearchState {
   case editingText
   case loadingFirstPage
   case loaded
-  case loadingNextPage
 }
 
 @MainActor
@@ -24,6 +23,7 @@ final class RepositorySearchViewModel: ObservableObject {
   @Published private(set) var totalCount = 0
   @Published private(set) var recentSearches: [RecentSearchItem] = []
   @Published private(set) var autocompleteItems: [RecentSearchItem] = []
+  @Published var isLoadingNextPage = false
   @Published var errorMessage: String?
     
   var repositorWebDependency: RepositoryWebDependency {
@@ -120,14 +120,14 @@ final class RepositorySearchViewModel: ObservableObject {
         }
         
         switch self.state {
-        case .loaded, .viewingRecentSearched:
+        case .loaded, .viewingRecentSearched, .editingText:
           if keyword.count > 0 {
             self.state = .editingText
             self.repositories.removeAll()
           } else {
             self.state = .viewingRecentSearched
           }
-        case .loadingFirstPage, .loadingNextPage, .editingText:
+        case .loadingFirstPage:
           break
         }
         
@@ -179,11 +179,12 @@ final class RepositorySearchViewModel: ObservableObject {
       currentPage = 1
       hasMore = true
     } else {
-      state = .loadingNextPage
+      isLoadingNextPage = true
     }
     
     defer {
       state = .loaded
+      isLoadingNextPage = false
     }
     
     do {

@@ -94,8 +94,6 @@ struct RepositorySearchView: View {
       Spacer()
     case .loaded:
       resultView
-    case .loadingNextPage:
-      resultView
     }
   }
   
@@ -180,7 +178,7 @@ struct RepositorySearchView: View {
           }
         }
         
-        if viewModel.state == .loadingNextPage {
+        if viewModel.isLoadingNextPage {
           HStack {
             Spacer()
             ProgressView()
