@@ -8,25 +8,24 @@
 import Combine
 import Foundation
 
+enum RepositorySearchState {
+  case viewingRecentSearched
+  case editingText
+  case loadingFirstPage
+  case loaded
+  case loadingNextPage
+}
+
 @MainActor
 final class RepositorySearchViewModel: ObservableObject {
+  @Published var state: RepositorySearchState = .viewingRecentSearched
   @Published var query: String = ""
   @Published private(set) var repositories: [RepositorySearchItem] = []
-  @Published private(set) var totalCount: Int = 0
-  @Published private(set) var isInitialLoading: Bool = false
-  @Published private(set) var isNextPageLoading: Bool = false
+  @Published private(set) var totalCount = 0
   @Published private(set) var recentSearches: [RecentSearchItem] = []
   @Published private(set) var autocompleteItems: [RecentSearchItem] = []
   @Published var errorMessage: String?
-  
-  var showRecentSearches: Bool {
-    query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-  }
-  
-  var showAutocomplete: Bool {
-    showRecentSearches == false && autocompleteItems.isEmpty == false
-  }
-  
+    
   var repositorWebDependency: RepositoryWebDependency {
     return component
   }
@@ -34,8 +33,8 @@ final class RepositorySearchViewModel: ObservableObject {
   private let component: RepositorySearchComponent
   private let apiService: RepositorySearchAPIService
   private let localDataService: RepositorySearchLocalDataService
-  private var currentPage: Int = 1
-  private var hasMore: Bool = true
+  private var currentPage = 1
+  private var hasMore = true
   private var cancellables = Set<AnyCancellable>()
   
   init(component: RepositorySearchComponent) {
@@ -71,9 +70,10 @@ final class RepositorySearchViewModel: ObservableObject {
   }
   
   func onAppearRepositoryItem(_ item: RepositorySearchItem) {
-    guard hasMore, isInitialLoading == false, isNextPageLoading == false else {
+    guard hasMore, state == .loaded else {
       return
     }
+    
     guard let index = repositories.firstIndex(where: { $0.id == item.id }) else {
       return
     }
@@ -112,21 +112,32 @@ final class RepositorySearchViewModel: ObservableObject {
   
   private func bindQuery() {
     $query
-      .debounce(for: .milliseconds(200), scheduler: RunLoop.main)
+      .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
       .removeDuplicates()
       .sink { [weak self] keyword in
         guard let self else {
           return
         }
         
-        if keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-          self.autocompleteItems = []
-          return
+        switch self.state {
+        case .loaded, .viewingRecentSearched:
+          if keyword.count > 0 {
+            self.state = .editingText
+            self.repositories.removeAll()
+          } else {
+            self.state = .viewingRecentSearched
+          }
+        case .loadingFirstPage, .loadingNextPage, .editingText:
+          break
         }
         
-        self.autocompleteItems = self.recentSearches
-          .filter { $0.keyword.localizedCaseInsensitiveContains(keyword) }
-          .sorted(by: { $0.searchedAt > $1.searchedAt })
+        if keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+          self.autocompleteItems = []
+        } else {
+          self.autocompleteItems = self.recentSearches
+            .filter { $0.keyword.localizedCaseInsensitiveContains(keyword) }
+            .sorted(by: { $0.searchedAt > $1.searchedAt })
+        }
       }
       .store(in: &cancellables)
   }
@@ -162,21 +173,17 @@ final class RepositorySearchViewModel: ObservableObject {
   
   private func fetchPage(page: Int, reset: Bool) async {
     if reset {
-      isInitialLoading = true
+      state = .loadingFirstPage
       errorMessage = nil
       repositories = []
       currentPage = 1
       hasMore = true
     } else {
-      isNextPageLoading = true
+      state = .loadingNextPage
     }
     
     defer {
-      if reset {
-        isInitialLoading = false
-      } else {
-        isNextPageLoading = false
-      }
+      state = .loaded
     }
     
     do {

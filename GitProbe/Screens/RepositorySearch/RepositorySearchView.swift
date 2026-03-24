@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RepositorySearchView: View {
   @ObservedObject var viewModel: RepositorySearchViewModel
+  @FocusState private var isSearchFieldFocused: Bool
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -44,13 +45,6 @@ struct RepositorySearchView: View {
       Text(Localizable.searchTitle.string)
         .font(.largeTitle)
         .bold()
-      
-      Spacer()
-      
-      if viewModel.isInitialLoading || viewModel.isNextPageLoading {
-        ProgressView()
-          .controlSize(.small)
-      }
     }
     .padding(.top, 8)
   }
@@ -60,8 +54,10 @@ struct RepositorySearchView: View {
       Image(systemName: Assets.magnifyingglass.name)
         .foregroundStyle(.secondary)
       TextField(Localizable.searchPlaceholder.string, text: $viewModel.query)
+        .focused($isSearchFieldFocused)
         .submitLabel(.search)
         .onSubmit {
+          isSearchFieldFocused = false
           viewModel.onTapSearch()
         }
       
@@ -83,11 +79,12 @@ struct RepositorySearchView: View {
   
   @ViewBuilder
   private var contentView: some View {
-    if viewModel.showRecentSearches {
+    switch viewModel.state {
+    case .viewingRecentSearched:
       recentSearchView
-    } else if viewModel.showAutocomplete {
+    case .editingText:
       autocompleteView
-    } else if viewModel.isInitialLoading {
+    case .loadingFirstPage:
       Spacer()
       HStack {
         Spacer()
@@ -95,7 +92,9 @@ struct RepositorySearchView: View {
         Spacer()
       }
       Spacer()
-    } else {
+    case .loaded:
+      resultView
+    case .loadingNextPage:
       resultView
     }
   }
@@ -118,6 +117,7 @@ struct RepositorySearchView: View {
       ForEach(viewModel.recentSearches) { item in
         HStack {
           Button(item.keyword) {
+            isSearchFieldFocused = false
             viewModel.onTapRecentSearch(item)
           }
           .buttonStyle(.plain)
@@ -144,6 +144,7 @@ struct RepositorySearchView: View {
     List {
       ForEach(viewModel.autocompleteItems) { item in
         Button {
+          isSearchFieldFocused = false
           viewModel.onTapAutocomplete(item)
         } label: {
           HStack {
@@ -179,7 +180,7 @@ struct RepositorySearchView: View {
           }
         }
         
-        if viewModel.isNextPageLoading {
+        if viewModel.state == .loadingNextPage {
           HStack {
             Spacer()
             ProgressView()
