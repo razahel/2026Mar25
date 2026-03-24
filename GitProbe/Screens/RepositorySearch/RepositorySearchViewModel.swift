@@ -84,7 +84,7 @@ final class RepositorySearchViewModel: ObservableObject {
     }
     
     Task {
-      await fetchPage(page: currentPage + 1, reset: false)
+      await fetchPage(page: currentPage + 1)
     }
   }
   
@@ -168,18 +168,27 @@ final class RepositorySearchViewModel: ObservableObject {
       errorMessage = Localizable.errorRecentSave.string
     }
     
-    await fetchPage(page: 1, reset: true)
+    await fetchPage(page: 1)
   }
   
-  private func fetchPage(page: Int, reset: Bool) async {
-    if reset {
+  private func fetchPage(page: Int) async {
+    let isLoadingMore = page > 1
+    if isLoadingMore {
+      if isLoadingNextPage {
+        return
+      }
+      
+      isLoadingNextPage = true
+    } else {
+      if state == .loadingFirstPage {
+        return
+      }
+      
       state = .loadingFirstPage
       errorMessage = nil
       repositories = []
       currentPage = 1
       hasMore = true
-    } else {
-      isLoadingNextPage = true
     }
     
     defer {
@@ -192,20 +201,16 @@ final class RepositorySearchViewModel: ObservableObject {
       totalCount = response.totalCount
       currentPage = page
       
-      if reset {
-        repositories = response.items
-      } else {
+      if isLoadingMore {
         repositories.append(contentsOf: response.items)
+      } else {
+        repositories = response.items
       }
+      
       hasMore = repositories.count < totalCount
     } catch {
       errorMessage = Localizable.errorSearch.string
     }
-  }
-  
-  var localizedResultCountText: String {
-    let format = Localizable.searchResultCountFormat.string
-    return String(format: format, locale: Locale.current, totalCount)
   }
   
   private static let dateFormatter: DateFormatter = {

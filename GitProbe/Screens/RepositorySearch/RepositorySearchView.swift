@@ -162,7 +162,7 @@ struct RepositorySearchView: View {
   
   private var resultView: some View {
     VStack(alignment: .leading, spacing: 6) {
-      Text(viewModel.localizedResultCountText)
+      Text(String(format: Localizable.searchResultCountFormat.string, locale: Locale.current, viewModel.totalCount))
         .font(.caption)
         .foregroundStyle(.secondary)
       
