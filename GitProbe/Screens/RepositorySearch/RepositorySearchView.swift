@@ -12,10 +12,7 @@ struct RepositorySearchView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text(Localizable.searchTitle.string)
-        .font(.largeTitle)
-        .bold()
-        .padding(.top, 8)
+      titleView
       searchInputView
       contentView
     }
@@ -33,6 +30,13 @@ struct RepositorySearchView: View {
     } message: {
       Text(viewModel.errorMessage ?? "")
     }
+  }
+
+  private var titleView: some View {
+    Text(Localizable.searchTitle.string)
+      .font(.largeTitle)
+      .bold()
+      .padding(.top, 8)
   }
   
   private var searchInputView: some View {
