@@ -51,27 +51,41 @@ final class RepositorySearchViewModel: ObservableObject {
   }
   
   func onTapSearch() {
-    Task { await search(with: query) }
+    Task {
+      await search(with: query)
+    }
   }
   
   func onTapRecentSearch(_ item: RecentSearchItem) {
     query = item.keyword
-    Task { await search(with: item.keyword) }
+    Task {
+      await search(with: item.keyword)
+    }
   }
   
   func onTapAutocomplete(_ item: RecentSearchItem) {
     query = item.keyword
-    Task { await search(with: item.keyword) }
+    Task {
+      await search(with: item.keyword)
+    }
   }
   
   func onAppearRepositoryItem(_ item: RepositorySearchItem) {
-    guard hasMore, isInitialLoading == false, isNextPageLoading == false else { return }
-    guard let index = repositories.firstIndex(where: { $0.id == item.id }) else { return }
+    guard hasMore, isInitialLoading == false, isNextPageLoading == false else {
+      return
+    }
+    guard let index = repositories.firstIndex(where: { $0.id == item.id }) else {
+      return
+    }
     
     let triggerIndex = repositories.count / 2
-    guard index >= triggerIndex else { return }
+    guard index >= triggerIndex else {
+      return
+    }
     
-    Task { await fetchPage(page: currentPage + 1, reset: false) }
+    Task {
+      await fetchPage(page: currentPage + 1, reset: false)
+    }
   }
   
   func onTapDeleteRecentSearch(keyword: String) {
@@ -101,7 +115,9 @@ final class RepositorySearchViewModel: ObservableObject {
       .debounce(for: .milliseconds(200), scheduler: RunLoop.main)
       .removeDuplicates()
       .sink { [weak self] keyword in
-        guard let self else { return }
+        guard let self else {
+          return
+        }
         
         if keyword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
           self.autocompleteItems = []
@@ -130,7 +146,9 @@ final class RepositorySearchViewModel: ObservableObject {
   
   private func search(with keyword: String) async {
     let trimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard trimmed.isEmpty == false else { return }
+    guard trimmed.isEmpty == false else {
+      return
+    }
     
     do {
       try localDataService.save(keyword: trimmed)

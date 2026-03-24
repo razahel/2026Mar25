@@ -23,10 +23,17 @@ struct RepositorySearchView: View {
       viewModel.onAppear()
     }
     .alert(Localizable.commonErrorTitle.string, isPresented: Binding(
-      get: { viewModel.errorMessage != nil },
-      set: { if $0 == false { viewModel.errorMessage = nil } }
+      get: { 
+        viewModel.errorMessage != nil
+      },
+      set: {
+        if $0 == false {
+          viewModel.errorMessage = nil
+        }
+      }
     )) {
-      Button(Localizable.commonConfirm.string, role: .cancel) { }
+      Button(Localizable.commonConfirm.string, role: .cancel) {
+      }
     } message: {
       Text(viewModel.errorMessage ?? "")
     }
