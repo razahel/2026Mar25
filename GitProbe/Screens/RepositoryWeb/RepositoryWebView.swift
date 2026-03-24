@@ -13,13 +13,21 @@ struct RepositoryWebView: View {
   
   var body: some View {
     VStack(spacing: 0) {
-      if viewModel.loadingProgress > 0 {
-        ProgressView(value: min(max(viewModel.loadingProgress, 0), 1), total: 1)
-          .progressViewStyle(.linear)
-          .tint(.accentColor)
+      ZStack(alignment: .leading) {
+        Color.clear
           .frame(height: 2)
           .frame(maxWidth: .infinity)
+        if viewModel.loadingProgress > 0 {
+          ProgressView(value: viewModel.loadingProgress, total: 1)
+            .progressViewStyle(.linear)
+            .tint(.accentColor)
+            .frame(height: 2)
+            .frame(maxWidth: .infinity)
+            .animation(.easeInOut(duration: 0.22), value: viewModel.loadingProgress)
+        }
       }
+      .frame(height: 2)
+      .frame(maxWidth: .infinity)
       RepositoryWebContainerView(url: viewModel.url, loadingProgress: $viewModel.loadingProgress)
         .ignoresSafeArea(edges: .bottom)
     }
@@ -88,7 +96,7 @@ private struct RepositoryWebContainerView: UIViewRepresentable {
       progressObservation = webView.observe(\.estimatedProgress, options: [.new, .initial]) { [weak self] webView, _ in
         guard let self else { return }
         DispatchQueue.main.async {
-          self.loadingProgress = webView.estimatedProgress
+          self.loadingProgress = max(min(webView.estimatedProgress, 1), 0)
         }
       }
     }
