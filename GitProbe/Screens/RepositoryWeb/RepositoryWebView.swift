@@ -57,6 +57,10 @@ private struct RepositoryWebContainerView: UIViewRepresentable {
       isLoading = true
     }
     
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+      isLoading = false
+    }
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
       isLoading = false
     }
