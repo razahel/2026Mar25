@@ -37,7 +37,6 @@ private struct RepositoryWebContainerView: UIViewRepresentable {
   func updateUIView(_ webView: WKWebView, context: Context) {
     let request = URLRequest(url: url)
     if webView.url != url {
-      isLoading = true
       webView.load(request)
     }
   }
