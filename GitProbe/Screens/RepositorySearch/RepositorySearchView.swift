@@ -122,10 +122,10 @@ struct RepositorySearchView: View {
             isSearchFieldFocused = false
             viewModel.onTapRecentSearch(item)
           }
+          .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+          .contentShape(Rectangle())
           .buttonStyle(.plain)
           .foregroundStyle(.primary)
-          
-          Spacer()
           
           Button {
             viewModel.onTapDeleteRecentSearch(keyword: item.keyword)
@@ -133,8 +133,10 @@ struct RepositorySearchView: View {
             Image(systemName: Assets.xmark.name)
               .foregroundStyle(.secondary)
           }
+          .frame(width: 44, height: 44)
           .buttonStyle(.plain)
         }
+        .padding(.vertical, 4)
         .font(.subheadline)
       }
       
