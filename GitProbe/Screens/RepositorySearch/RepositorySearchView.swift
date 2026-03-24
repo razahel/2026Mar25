@@ -122,7 +122,7 @@ struct RepositorySearchView: View {
             isSearchFieldFocused = false
             viewModel.onTapRecentSearch(item)
           }
-          .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+          .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
           .contentShape(Rectangle())
           .buttonStyle(.plain)
           .foregroundStyle(.primary)
