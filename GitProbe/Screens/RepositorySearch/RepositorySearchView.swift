@@ -111,6 +111,7 @@ struct RepositorySearchView: View {
           Spacer()
           if viewModel.recentSearches.isEmpty == false {
             Button(Localizable.recentDeleteAll.string) {
+              isSearchFieldFocused = false
               viewModel.onTapDeleteAllRecentSearches()
             }
             .font(.caption2.pointSize(14))
