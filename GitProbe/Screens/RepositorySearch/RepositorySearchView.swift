@@ -201,7 +201,7 @@ struct RepositorySearchView: View {
               repository: item
             )
           } label: {
-            RepositoryRowView(item: item)
+            repositoryRowView(item: item)
           }
           .onAppear {
             viewModel.onAppearRepositoryItem(item)
@@ -211,12 +211,9 @@ struct RepositorySearchView: View {
       .listStyle(.plain)
     }
   }
-}
 
-private struct RepositoryRowView: View {
-  let item: RepositorySearchItem
-  
-  var body: some View {
+  @ViewBuilder
+  private func repositoryRowView(item: RepositorySearchItem) -> some View {
     HStack(spacing: 10) {
       AsyncImage(url: item.owner.avatarURL) { phase in
         switch phase {
@@ -228,7 +225,7 @@ private struct RepositoryRowView: View {
       }
       .frame(width: 36, height: 36)
       .clipShape(Circle())
-      
+
       VStack(alignment: .leading, spacing: 2) {
         Text(item.name)
           .font(.headline)
