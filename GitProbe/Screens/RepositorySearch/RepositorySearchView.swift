@@ -102,46 +102,50 @@ struct RepositorySearchView: View {
   }
   
   private var recentSearchView: some View {
-    VStack(alignment: .leading, spacing: 10) {
-      HStack {
-        Text(Localizable.recentTitle.string)
-          .font(.headline)
-        Spacer()
-        if viewModel.recentSearches.isEmpty == false {
-          Button(Localizable.recentDeleteAll.string) {
-            viewModel.onTapDeleteAllRecentSearches()
-          }
-          .font(.caption)
-          .foregroundStyle(.pink)
-        }
-      }
-      
-      ForEach(viewModel.recentSearches) { item in
+    ScrollView {
+      VStack(alignment: .leading, spacing: 10) {
         HStack {
-          Button(item.keyword) {
-            isSearchFieldFocused = false
-            viewModel.onTapRecentSearch(item)
+          Text(Localizable.recentTitle.string)
+            .font(.headline)
+          Spacer()
+          if viewModel.recentSearches.isEmpty == false {
+            Button(Localizable.recentDeleteAll.string) {
+              viewModel.onTapDeleteAllRecentSearches()
+            }
+            .font(.caption)
+            .foregroundStyle(.pink)
           }
-          .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
-          .contentShape(Rectangle())
-          .buttonStyle(.plain)
-          .foregroundStyle(.primary)
-          
-          Button {
-            viewModel.onTapDeleteRecentSearch(keyword: item.keyword)
-          } label: {
-            Image(systemName: Assets.xmark.name)
-              .foregroundStyle(.secondary)
-          }
-          .frame(width: 44, height: 44)
-          .buttonStyle(.plain)
         }
-        .padding(.vertical, 4)
-        .font(.subheadline)
+        
+        ForEach(viewModel.recentSearches) { item in
+          HStack {
+            Button(item.keyword) {
+              isSearchFieldFocused = false
+              viewModel.onTapRecentSearch(item)
+            }
+            .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
+            .contentShape(Rectangle())
+            .buttonStyle(.plain)
+            .foregroundStyle(.primary)
+            
+            Button {
+              viewModel.onTapDeleteRecentSearch(keyword: item.keyword)
+            } label: {
+              Image(systemName: Assets.xmark.name)
+                .foregroundStyle(.secondary)
+            }
+            .frame(width: 44, height: 44)
+            .buttonStyle(.plain)
+          }
+          .padding(.vertical, 4)
+          .font(.subheadline)
+        }
+        
+        Spacer(minLength: 0)
       }
-      
-      Spacer()
     }
+    .frame(maxHeight: .infinity, alignment: .top)
+    .scrollBounceBehavior(.always)
   }
   
   private var autocompleteView: some View {
