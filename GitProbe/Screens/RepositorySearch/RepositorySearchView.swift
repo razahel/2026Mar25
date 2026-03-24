@@ -45,6 +45,10 @@ struct RepositorySearchView: View {
       Text(Localizable.searchTitle.string)
         .font(.largeTitle)
         .bold()
+      Spacer()
+      if viewModel.isLoadingNextPage {
+        ProgressView()
+      }
     }
     .padding(.top, 8)
   }
@@ -175,14 +179,6 @@ struct RepositorySearchView: View {
           }
           .onAppear {
             viewModel.onAppearRepositoryItem(item)
-          }
-        }
-        
-        if viewModel.isLoadingNextPage {
-          HStack {
-            Spacer()
-            ProgressView()
-            Spacer()
           }
         }
       }
