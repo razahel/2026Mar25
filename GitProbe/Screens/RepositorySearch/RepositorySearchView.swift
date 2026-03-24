@@ -179,7 +179,6 @@ struct RepositorySearchView: View {
           }
         }
         .buttonStyle(.plain)
-        .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
       }
     }
     .listStyle(.plain)
@@ -203,7 +202,6 @@ struct RepositorySearchView: View {
           } label: {
             RepositoryRowView(item: item)
           }
-          .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
           .onAppear {
             viewModel.onAppearRepositoryItem(item)
           }
