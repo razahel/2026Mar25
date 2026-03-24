@@ -107,17 +107,17 @@ struct RepositorySearchView: View {
       VStack(alignment: .leading, spacing: 10) {
         HStack {
           Text(Localizable.recentTitle.string)
-            .font(.subheadline.weight(.semibold))
+            .font(.subheadline.pointSize(16).weight(.semibold))
           Spacer()
           if viewModel.recentSearches.isEmpty == false {
             Button(Localizable.recentDeleteAll.string) {
               viewModel.onTapDeleteAllRecentSearches()
             }
-            .font(.caption2)
+            .font(.caption2.pointSize(14))
             .foregroundStyle(.pink)
           }
         }
-        .frame(height: 30)
+        .frame(height: 32)
 
         if viewModel.recentSearches.isEmpty {
           Text(Localizable.searchPlaceholder.string)
