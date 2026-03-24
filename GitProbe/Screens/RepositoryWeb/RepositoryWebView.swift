@@ -12,15 +12,36 @@ struct RepositoryWebView: View {
   @ObservedObject var viewModel: RepositoryWebViewModel
   
   var body: some View {
-    ZStack {
-      RepositoryWebContainerView(url: viewModel.url, isLoading: $viewModel.isLoading)
-        .ignoresSafeArea(edges: .bottom)
-      
-      if viewModel.isLoading {
-        ProgressView()
-          .controlSize(.regular)
+    RepositoryWebContainerView(url: viewModel.url, isLoading: $viewModel.isLoading)
+      .ignoresSafeArea(edges: .bottom)
+      .navigationTitle("")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .principal) {
+          HStack(spacing: 8) {
+            AsyncImage(url: viewModel.repository.owner.avatarURL) { phase in
+              switch phase {
+              case .success(let image):
+                image.resizable().scaledToFill()
+              default:
+                Color(.systemGray5)
+              }
+            }
+            .frame(width: 24, height: 24)
+            .clipShape(Circle())
+            
+            Text(viewModel.repository.name)
+              .font(.headline)
+              .lineLimit(1)
+            
+            Spacer()
+            
+            if viewModel.isLoading {
+              ProgressView()
+            }
+          }
+        }
       }
-    }
   }
 }
 
