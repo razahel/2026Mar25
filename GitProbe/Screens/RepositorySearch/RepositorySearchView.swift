@@ -17,7 +17,6 @@ struct RepositorySearchView: View {
       searchInputView
       contentView
     }
-    .padding(.horizontal, 16)
     .navigationTitle("")
     .navigationBarTitleDisplayMode(.inline)
     .onAppear {
@@ -50,6 +49,7 @@ struct RepositorySearchView: View {
         ProgressView()
       }
     }
+    .padding(.horizontal, 16)
     .padding(.top, 8)
   }
   
@@ -79,6 +79,7 @@ struct RepositorySearchView: View {
     .padding(.vertical, 8)
     .background(Color(.secondarySystemFill))
     .clipShape(RoundedRectangle(cornerRadius: 8))
+    .padding(.horizontal, 16)
   }
   
   @ViewBuilder
@@ -154,6 +155,7 @@ struct RepositorySearchView: View {
 
         Spacer(minLength: 0)
       }
+      .padding(.horizontal, 16)
       .frame(maxWidth: .infinity, alignment: .leading)
     }
     .frame(maxHeight: .infinity, alignment: .top)
@@ -177,6 +179,7 @@ struct RepositorySearchView: View {
           }
         }
         .buttonStyle(.plain)
+        .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
       }
     }
     .listStyle(.plain)
@@ -187,6 +190,7 @@ struct RepositorySearchView: View {
       Text(String(format: Localizable.searchResultCountFormat.string, locale: Locale.current, viewModel.totalCount))
         .font(.caption)
         .foregroundStyle(.secondary)
+        .padding(.horizontal, 16)
       
       List {
         ForEach(viewModel.repositories) { item in
@@ -199,6 +203,7 @@ struct RepositorySearchView: View {
           } label: {
             RepositoryRowView(item: item)
           }
+          .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
           .onAppear {
             viewModel.onAppearRepositoryItem(item)
           }
