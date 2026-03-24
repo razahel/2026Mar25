@@ -1,3 +1,10 @@
+//
+//  Localizable.swift
+//  GitProbe
+//
+//  Created by Yoon Kang on 23/3/26.
+//
+
 import Foundation
 
 enum Localizable {

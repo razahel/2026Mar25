@@ -1,3 +1,10 @@
+//
+//  Assets.swift
+//  GitProbe
+//
+//  Created by Yoon Kang on 23/3/26.
+//
+
 enum Assets: String {
   case magnifyingglass = "magnifyingglass"
   case xmarkCircleFill = "xmark.circle.fill"

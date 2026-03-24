@@ -1,3 +1,10 @@
+//
+//  RepositorySearchComponent.swift
+//  GitProbe
+//
+//  Created by Yoon Kang on 23/3/26.
+//
+
 import Foundation
 
 protocol RepositorySearchDependency {
