@@ -12,46 +12,52 @@ struct RepositoryWebView: View {
   @ObservedObject var viewModel: RepositoryWebViewModel
   
   var body: some View {
-    RepositoryWebContainerView(url: viewModel.url, isLoading: $viewModel.isLoading)
-      .ignoresSafeArea(edges: .bottom)
-      .navigationTitle("")
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .principal) {
-          HStack(spacing: 8) {
-            AsyncImage(url: viewModel.repository.owner.avatarURL) { phase in
-              switch phase {
-              case .success(let image):
-                image.resizable().scaledToFill()
-              default:
-                Color(.systemGray5)
-              }
-            }
-            .frame(width: 24, height: 24)
-            .clipShape(Circle())
-            
-            Text(viewModel.repository.name)
-              .font(.headline)
-              .lineLimit(1)
-            
-            Spacer()
-            
-            if viewModel.isLoading {
-              ProgressView()
+    VStack(spacing: 0) {
+      if viewModel.loadingProgress > 0 {
+        ProgressView(value: min(max(viewModel.loadingProgress, 0), 1), total: 1)
+          .progressViewStyle(.linear)
+          .tint(.accentColor)
+          .frame(height: 2)
+          .frame(maxWidth: .infinity)
+      }
+      RepositoryWebContainerView(url: viewModel.url, loadingProgress: $viewModel.loadingProgress)
+        .ignoresSafeArea(edges: .bottom)
+    }
+    .navigationTitle("")
+    .navigationBarTitleDisplayMode(.inline)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        HStack(spacing: 8) {
+          AsyncImage(url: viewModel.repository.owner.avatarURL) { phase in
+            switch phase {
+            case .success(let image):
+              image.resizable().scaledToFill()
+            default:
+              Color(.systemGray5)
             }
           }
+          .frame(width: 24, height: 24)
+          .clipShape(Circle())
+          
+          Text(viewModel.repository.name)
+            .font(.headline)
+            .lineLimit(1)
+          
+          Spacer()
         }
       }
+    }
   }
 }
 
 private struct RepositoryWebContainerView: UIViewRepresentable {
   let url: URL
-  @Binding var isLoading: Bool
+  @Binding var loadingProgress: Double
   
   func makeUIView(context: Context) -> WKWebView {
     let webView = WKWebView(frame: .zero)
     webView.navigationDelegate = context.coordinator
+    context.coordinator.startObservingProgress(of: webView)
     return webView
   }
   
@@ -63,34 +69,40 @@ private struct RepositoryWebContainerView: UIViewRepresentable {
   }
   
   func makeCoordinator() -> Coordinator {
-    Coordinator(isLoading: $isLoading)
+    Coordinator(loadingProgress: $loadingProgress)
   }
   
   final class Coordinator: NSObject, WKNavigationDelegate {
-    @Binding private var isLoading: Bool
+    @Binding private var loadingProgress: Double
+    private var progressObservation: NSKeyValueObservation?
     
-    init(isLoading: Binding<Bool>) {
-      _isLoading = isLoading
+    init(loadingProgress: Binding<Double>) {
+      _loadingProgress = loadingProgress
     }
     
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-      isLoading = true
+    deinit {
+      progressObservation?.invalidate()
     }
     
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-      isLoading = false
+    func startObservingProgress(of webView: WKWebView) {
+      progressObservation = webView.observe(\.estimatedProgress, options: [.new, .initial]) { [weak self] webView, _ in
+        guard let self else { return }
+        DispatchQueue.main.async {
+          self.loadingProgress = webView.estimatedProgress
+        }
+      }
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-      isLoading = false
+      loadingProgress = 0
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-      isLoading = false
+      loadingProgress = 0
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-      isLoading = false
+      loadingProgress = 0
     }
   }
 }

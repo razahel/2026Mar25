@@ -11,7 +11,7 @@ import Combine
 @MainActor
 final class RepositoryWebViewModel: ObservableObject {
   @Published var url: URL
-  @Published var isLoading = true
+  @Published var loadingProgress: Double = 0
   let repository: RepositorySearchItem
   
   init(component: RepositoryWebComponent, url: URL, repository: RepositorySearchItem) {
