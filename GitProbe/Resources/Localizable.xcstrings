@@ -1,11 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "common.confirm" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -22,7 +18,6 @@
       }
     },
     "common.error.title" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -39,7 +34,6 @@
       }
     },
     "error.recent.delete" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -56,7 +50,6 @@
       }
     },
     "error.recent.delete_all" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -73,7 +66,6 @@
       }
     },
     "error.recent.fetch" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -90,7 +82,6 @@
       }
     },
     "error.recent.save" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -107,7 +98,6 @@
       }
     },
     "error.search" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -124,7 +114,6 @@
       }
     },
     "recent.delete_all" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -141,7 +130,6 @@
       }
     },
     "recent.title" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -158,7 +146,6 @@
       }
     },
     "search.placeholder" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -175,7 +162,6 @@
       }
     },
     "search.result.count.format" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -192,7 +178,6 @@
       }
     },
     "search.title" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

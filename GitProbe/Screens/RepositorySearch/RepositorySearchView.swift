@@ -5,7 +5,7 @@ struct RepositorySearchView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text(Localizable.searchTitle.text)
+      Text(Localizable.searchTitle.string)
         .font(.largeTitle)
         .bold()
         .padding(.top, 8)
@@ -18,11 +18,11 @@ struct RepositorySearchView: View {
     .onAppear {
       viewModel.onAppear()
     }
-    .alert(Localizable.commonErrorTitle.text, isPresented: Binding(
+    .alert(Localizable.commonErrorTitle.string, isPresented: Binding(
       get: { viewModel.errorMessage != nil },
       set: { if $0 == false { viewModel.errorMessage = nil } }
     )) {
-      Button(Localizable.commonConfirm.text, role: .cancel) { }
+      Button(Localizable.commonConfirm.string, role: .cancel) { }
     } message: {
       Text(viewModel.errorMessage ?? "")
     }
@@ -32,7 +32,7 @@ struct RepositorySearchView: View {
     HStack(spacing: 8) {
       Image(systemName: Assets.magnifyingglass.name)
         .foregroundStyle(.secondary)
-      TextField(Localizable.searchPlaceholder.text, text: $viewModel.query)
+      TextField(Localizable.searchPlaceholder.string, text: $viewModel.query)
         .submitLabel(.search)
         .onSubmit {
           viewModel.onTapSearch()
@@ -76,11 +76,11 @@ struct RepositorySearchView: View {
   private var recentSearchView: some View {
     VStack(alignment: .leading, spacing: 10) {
       HStack {
-        Text(Localizable.recentTitle.text)
+        Text(Localizable.recentTitle.string)
           .font(.headline)
         Spacer()
         if viewModel.recentSearches.isEmpty == false {
-          Button(Localizable.recentDeleteAll.text) {
+          Button(Localizable.recentDeleteAll.string) {
             viewModel.onTapDeleteAllRecentSearches()
           }
           .font(.caption)
