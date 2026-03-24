@@ -33,10 +33,19 @@ struct RepositorySearchView: View {
   }
 
   private var titleView: some View {
-    Text(Localizable.searchTitle.string)
-      .font(.largeTitle)
-      .bold()
-      .padding(.top, 8)
+    HStack(spacing: 8) {
+      Text(Localizable.searchTitle.string)
+        .font(.largeTitle)
+        .bold()
+      
+      Spacer()
+      
+      if viewModel.isInitialLoading || viewModel.isNextPageLoading {
+        ProgressView()
+          .controlSize(.small)
+      }
+    }
+    .padding(.top, 8)
   }
   
   private var searchInputView: some View {
