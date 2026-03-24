@@ -108,7 +108,6 @@ final class RepositorySearchViewModel: ObservableObject {
   
   private func bindQuery() {
     $query
-      .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
       .removeDuplicates()
       .sink { [weak self] keyword in
         guard let self else {
