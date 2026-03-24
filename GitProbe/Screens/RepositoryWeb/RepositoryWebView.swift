@@ -18,7 +18,7 @@ struct RepositoryWebView: View {
       
       if viewModel.isLoading {
         ProgressView()
-          .controlSize(.large)
+          .controlSize(.regular)
       }
     }
   }
