@@ -106,43 +106,55 @@ struct RepositorySearchView: View {
       VStack(alignment: .leading, spacing: 10) {
         HStack {
           Text(Localizable.recentTitle.string)
-            .font(.headline)
+            .font(.subheadline.weight(.semibold))
           Spacer()
           if viewModel.recentSearches.isEmpty == false {
             Button(Localizable.recentDeleteAll.string) {
               viewModel.onTapDeleteAllRecentSearches()
             }
-            .font(.caption)
+            .font(.caption2)
             .foregroundStyle(.pink)
           }
         }
-        
-        ForEach(viewModel.recentSearches) { item in
-          HStack {
-            Button(item.keyword) {
-              isSearchFieldFocused = false
-              viewModel.onTapRecentSearch(item)
+
+        if viewModel.recentSearches.isEmpty {
+          Text(Localizable.searchPlaceholder.string)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .padding(.top, 8)
+        } else {
+          WrapLayout(spacing: 8, lineSpacing: 8) {
+            ForEach(viewModel.recentSearches) { item in
+              HStack(spacing: 6) {
+                Button(item.keyword) {
+                  isSearchFieldFocused = false
+                  viewModel.onTapRecentSearch(item)
+                }
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+                .buttonStyle(.plain)
+                
+                Button {
+                  viewModel.onTapDeleteRecentSearch(keyword: item.keyword)
+                } label: {
+                  Image(systemName: Assets.xmark.name)
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+              }
+              .padding(.horizontal, 12)
+              .padding(.vertical, 8)
+              .background(Color(.secondarySystemFill))
+              .clipShape(Capsule())
             }
-            .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
-            .contentShape(Rectangle())
-            .buttonStyle(.plain)
-            .foregroundStyle(.primary)
-            
-            Button {
-              viewModel.onTapDeleteRecentSearch(keyword: item.keyword)
-            } label: {
-              Image(systemName: Assets.xmark.name)
-                .foregroundStyle(.secondary)
-            }
-            .frame(width: 44, height: 44)
-            .buttonStyle(.plain)
           }
-          .padding(.vertical, 4)
-          .font(.subheadline)
+          .frame(maxWidth: .infinity, alignment: .leading)
         }
-        
+
         Spacer(minLength: 0)
       }
+      .frame(maxWidth: .infinity, alignment: .leading)
     }
     .frame(maxHeight: .infinity, alignment: .top)
     .scrollBounceBehavior(.always)
@@ -223,5 +235,72 @@ private struct RepositoryRowView: View {
       }
     }
     .padding(.vertical, 4)
+  }
+}
+
+private struct WrapLayout: Layout {
+  let spacing: CGFloat
+  let lineSpacing: CGFloat
+  
+  init(spacing: CGFloat = 8, lineSpacing: CGFloat = 8) {
+    self.spacing = spacing
+    self.lineSpacing = lineSpacing
+  }
+  
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
+  ) -> CGSize {
+    guard let maxWidth = proposal.width, maxWidth > 0 else {
+      let widths = subviews.map { $0.sizeThatFits(.unspecified).width }
+      let heights = subviews.map { $0.sizeThatFits(.unspecified).height }
+      return CGSize(width: widths.reduce(0, +), height: heights.max() ?? 0)
+    }
+    
+    var currentX: CGFloat = 0
+    var currentY: CGFloat = 0
+    var rowHeight: CGFloat = 0
+    
+    for subview in subviews {
+      let size = subview.sizeThatFits(.unspecified)
+      if currentX + size.width > maxWidth, currentX > 0 {
+        currentX = 0
+        currentY += rowHeight + lineSpacing
+        rowHeight = 0
+      }
+      
+      currentX += size.width + spacing
+      rowHeight = max(rowHeight, size.height)
+    }
+    
+    return CGSize(width: maxWidth, height: currentY + rowHeight)
+  }
+  
+  func placeSubviews(
+    in bounds: CGRect,
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
+  ) {
+    var currentX = bounds.minX
+    var currentY = bounds.minY
+    var rowHeight: CGFloat = 0
+    
+    for subview in subviews {
+      let size = subview.sizeThatFits(.unspecified)
+      if currentX + size.width > bounds.maxX, currentX > bounds.minX {
+        currentX = bounds.minX
+        currentY += rowHeight + lineSpacing
+        rowHeight = 0
+      }
+      
+      subview.place(
+        at: CGPoint(x: currentX, y: currentY),
+        proposal: ProposedViewSize(size)
+      )
+      currentX += size.width + spacing
+      rowHeight = max(rowHeight, size.height)
+    }
   }
 }
