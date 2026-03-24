@@ -10,14 +10,13 @@ import WebKit
 
 struct RepositoryWebView: View {
   @ObservedObject var viewModel: RepositoryWebViewModel
-  @State private var isLoading = true
   
   var body: some View {
     ZStack {
-      RepositoryWebContainerView(url: viewModel.url, isLoading: $isLoading)
+      RepositoryWebContainerView(url: viewModel.url, isLoading: $viewModel.isLoading)
         .ignoresSafeArea(edges: .bottom)
       
-      if isLoading {
+      if viewModel.isLoading {
         ProgressView()
           .controlSize(.large)
       }

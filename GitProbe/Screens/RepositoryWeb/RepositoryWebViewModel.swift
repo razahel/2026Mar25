@@ -11,6 +11,7 @@ import Combine
 @MainActor
 final class RepositoryWebViewModel: ObservableObject {
   @Published var url: URL
+  @Published var isLoading = true
   
   init(component: RepositoryWebComponent, url: URL) {
     self.url = url
