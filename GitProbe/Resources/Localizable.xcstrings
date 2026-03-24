@@ -195,6 +195,38 @@
           }
         }
       }
+    },
+    "split.detail.placeholder.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a repository from the list to open its page."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목록에서 저장소를 선택하면 페이지가 열립니다."
+          }
+        }
+      }
+    },
+    "split.detail.placeholder.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No repository selected"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택된 저장소 없음"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

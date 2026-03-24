@@ -12,6 +12,15 @@ struct RepositorySearchView: View {
   @FocusState private var isSearchFieldFocused: Bool
   
   var body: some View {
+    NavigationSplitView {
+      sidebarColumn
+        .navigationSplitViewColumnWidth(min: 280, ideal: 360, max: 480)
+    } detail: {
+      detailColumn
+    }
+  }
+
+  private var sidebarColumn: some View {
     VStack(alignment: .leading, spacing: 12) {
       titleView
       searchInputView
@@ -24,7 +33,7 @@ struct RepositorySearchView: View {
       viewModel.onAppear()
     }
     .alert(Localizable.commonErrorTitle.string, isPresented: Binding(
-      get: { 
+      get: {
         viewModel.errorMessage != nil
       },
       set: {
@@ -37,6 +46,25 @@ struct RepositorySearchView: View {
       }
     } message: {
       Text(viewModel.errorMessage ?? "")
+    }
+  }
+
+  private var detailColumn: some View {
+    Group {
+      if let repository = viewModel.selectedRepository {
+        RepositoryWebScreen(
+          dependency: viewModel.repositorWebDependency,
+          url: repository.htmlURL,
+          repository: repository
+        )
+        .id(repository.id)
+      } else {
+        ContentUnavailableView {
+          Label(Localizable.splitDetailPlaceholderTitle.string, systemImage: "safari")
+        } description: {
+          Text(Localizable.splitDetailPlaceholderDescription.string)
+        }
+      }
     }
   }
 
@@ -194,20 +222,13 @@ struct RepositorySearchView: View {
         .foregroundStyle(.secondary)
         .padding(.horizontal, 16)
       
-      List {
+      List(selection: $viewModel.selectedRepository) {
         ForEach(viewModel.repositories) { item in
-          NavigationLink {
-            RepositoryWebScreen(
-              dependency: viewModel.repositorWebDependency,
-              url: item.htmlURL,
-              repository: item
-            )
-          } label: {
-            repositoryRowView(item: item)
-          }
-          .onAppear {
-            viewModel.onAppearRepositoryItem(item)
-          }
+          repositoryRowView(item: item)
+            .tag(item)
+            .onAppear {
+              viewModel.onAppearRepositoryItem(item)
+            }
         }
       }
       .listStyle(.plain)

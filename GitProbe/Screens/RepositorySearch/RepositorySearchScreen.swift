@@ -6,16 +6,15 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct RepositorySearchScreen: View {
   private let viewModel: RepositorySearchViewModel
-  
+
   init(dependency: RepositorySearchDependency) {
-    let component = RepositorySearchComponent(dependency: dependency)    
-    self.viewModel = RepositorySearchViewModel(component: component)
+    let component = RepositorySearchComponent(dependency: dependency)
+    viewModel = RepositorySearchViewModel(component: component)
   }
-  
+
   var body: some View {
     RepositorySearchView(viewModel: viewModel)
   }

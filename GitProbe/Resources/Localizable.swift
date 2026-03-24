@@ -20,7 +20,9 @@ enum Localizable {
   case errorRecentSave
   case errorSearch
   case searchResultCountFormat
-  
+  case splitDetailPlaceholderTitle
+  case splitDetailPlaceholderDescription
+
   var string: String {
     switch self {
     case .searchTitle:
@@ -47,6 +49,10 @@ enum Localizable {
       String(localized: "error.search")
     case .searchResultCountFormat:
       String(localized: "search.result.count.format")
+    case .splitDetailPlaceholderTitle:
+      String(localized: "split.detail.placeholder.title")
+    case .splitDetailPlaceholderDescription:
+      String(localized: "split.detail.placeholder.description")
     }
   }
 }

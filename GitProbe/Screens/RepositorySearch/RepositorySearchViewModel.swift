@@ -25,7 +25,8 @@ final class RepositorySearchViewModel: ObservableObject {
   @Published private(set) var autocompleteItems: [RecentSearchItem] = []
   @Published var isLoadingNextPage = false
   @Published var errorMessage: String?
-    
+  @Published var selectedRepository: RepositorySearchItem?
+
   var repositorWebDependency: RepositoryWebDependency {
     return component
   }
@@ -180,6 +181,7 @@ final class RepositorySearchViewModel: ObservableObject {
       }
       
       state = .loadingFirstPage
+      selectedRepository = nil
       errorMessage = nil
       repositories = []
       currentPage = 1
