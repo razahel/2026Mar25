@@ -10,7 +10,7 @@ import Combine
 
 @MainActor
 final class RepositoryWebViewModel: ObservableObject {
-  let url: URL
+  @Published var url: URL
   
   init(component: RepositoryWebComponent, url: URL) {
     self.url = url

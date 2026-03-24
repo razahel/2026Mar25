@@ -17,6 +17,5 @@ struct RepositoryWebScreen: View {
   
   var body: some View {
     RepositoryWebView(viewModel: viewModel)
-      .ignoresSafeArea(edges: .bottom)
   }
 }
