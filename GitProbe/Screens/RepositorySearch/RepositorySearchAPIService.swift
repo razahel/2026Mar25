@@ -46,7 +46,7 @@ struct RepositorySearchAPIServiceImpl: RepositorySearchAPIService {
   }
 }
 
-enum RepositorySearchServiceError: Error {
+enum RepositorySearchServiceError: Error, Equatable {
   case invalidURL
   case badStatusCode(Int)
   case decodingFailed

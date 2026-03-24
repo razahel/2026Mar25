@@ -20,4 +20,9 @@ struct RepositorySearchComponent: RepositoryWebDependency {
     self.apiService = RepositorySearchAPIServiceImpl(httpClient: dependency.httpClient)
     self.localDataService = RepositorySearchLocalDataServiceImpl(localDataClient: dependency.localDataClient)
   }
+
+  init(apiService: RepositorySearchAPIService, localDataService: RepositorySearchLocalDataService) {
+    self.apiService = apiService
+    self.localDataService = localDataService
+  }
 }
