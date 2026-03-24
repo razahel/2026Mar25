@@ -17,6 +17,7 @@ struct RepositorySearchView: View {
       searchInputView
       contentView
     }
+    .scrollDismissesKeyboard(.interactively)
     .navigationTitle("")
     .navigationBarTitleDisplayMode(.inline)
     .onAppear {
