@@ -79,7 +79,7 @@ final class RepositorySearchViewModel: ObservableObject {
       return
     }
     
-    let triggerIndex = repositories.count / 2
+    let triggerIndex = max(0, repositories.count - 10)
     guard index >= triggerIndex else {
       return
     }
